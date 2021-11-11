@@ -39,10 +39,10 @@ class BloggsController < ApplicationController
     respond_to do |format|
       if @blogg.update(blogg_params)
         format.html { redirect_to @blogg, notice: "Blogg was successfully updated." }
-        format.json { render :show, status: :ok, location: @blogg }
+        #format.json { render :show, status: :ok, location: @blogg }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @blogg.errors, status: :unprocessable_entity }
+        #format.json { render json: @blogg.errors, status: :unprocessable_entity }
       end
     end
   end
