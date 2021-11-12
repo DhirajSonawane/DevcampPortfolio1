@@ -1,5 +1,5 @@
 class BloggsController < ApplicationController
-  before_action :set_blogg, only: %i[ show edit update destroy ]
+  before_action :set_blogg, only: %i[ show edit update destroy toggle_status]
 
   # GET /bloggs or /bloggs.json
   def index
@@ -52,8 +52,17 @@ class BloggsController < ApplicationController
     @blogg.destroy
     respond_to do |format|
       format.html { redirect_to bloggs_url, notice: "Blogg was successfully destroyed." }
-      format.json { head :no_content }
+      #format.json { head :no_content }
     end
+  end
+
+  def toggle_status
+    if @blogg.draft?
+      @blogg.published! 
+    elsif @blogg.published?
+      @blogg.draft! 
+    end
+    redirect_to bloggs_url, notice: "Post status has been updated"
   end
 
   private
@@ -67,4 +76,6 @@ class BloggsController < ApplicationController
     def blogg_params
       params.require(:blogg).permit(:title, :body)
     end
+
+
 end
