@@ -1,5 +1,5 @@
 class BloggsController < ApplicationController
-  before_action :set_blogg, only: %i[ show edit update destroy ]
+  before_action :set_blogg, only: %i[ show edit update destroy toggle_status]
 
   # GET /bloggs or /bloggs.json
   def index
@@ -39,10 +39,10 @@ class BloggsController < ApplicationController
     respond_to do |format|
       if @blogg.update(blogg_params)
         format.html { redirect_to @blogg, notice: "Blogg was successfully updated." }
-        format.json { render :show, status: :ok, location: @blogg }
+        #format.json { render :show, status: :ok, location: @blogg }
       else
         format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @blogg.errors, status: :unprocessable_entity }
+        #format.json { render json: @blogg.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -52,18 +52,30 @@ class BloggsController < ApplicationController
     @blogg.destroy
     respond_to do |format|
       format.html { redirect_to bloggs_url, notice: "Blogg was successfully destroyed." }
-      format.json { head :no_content }
+      #format.json { head :no_content }
     end
+  end
+
+  def toggle_status
+    if @blogg.draft?
+      @blogg.published! 
+    elsif @blogg.published?
+      @blogg.draft! 
+    end
+    redirect_to bloggs_url, notice: "Post status has been updated"
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_blogg
-      @blogg = Blogg.find(params[:id])
+      #@blogg = Blogg.find(params[:id])
+      @blogg = Blogg.friendly.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.
     def blogg_params
       params.require(:blogg).permit(:title, :body)
     end
+
+
 end
