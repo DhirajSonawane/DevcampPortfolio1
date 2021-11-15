@@ -14,7 +14,7 @@
   <tbody>
     <% @bloggs.each do |blogg| %>
       <tr>
-        <td><%= blogg.title %></td>
+        <td><%= blogg.title.upcase %></td>
         <td><%= blogg.body %></td>
         <td><%= link_to blogg.status, toggle_status_blogg_path(blogg) %></td>
         <td><%= link_to 'Show', blogg %></td>
